@@ -1,0 +1,9 @@
+dev:
+  LAMBDA_ENV: dev
+  ENVIRONMENT: test
+uat:
+  LAMBDA_ENV: uat
+  ENVIRONMENT: test
+prod:
+  LAMBDA_ENV: prod
+  ENVIRONMENT: prod

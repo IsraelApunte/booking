@@ -1,0 +1,37 @@
+{
+    "entityName": "business",
+    "body": {
+        "id": null,
+        "firstName": "The Sports Capital",
+        "lastName": "BUSINESS TEST2" ,
+        "identificationTypeId": 11,
+        "identificationNumber": "1720648989001",
+        "agentId": null,
+        "tradename": "Canchas Sintéticas Quito",
+        "birthday": "2021-10-20",
+        "mobileCodeId": 1001,
+        "mobile": "0993374440",
+        "phone": "3210222",
+        "email": "mary99.toapanta@gmail.com",
+        "logo": "https://intl-latam-khronos-resources.s3.amazonaws.com/banner/1635363694610.png",
+        "personTypeId": 61,
+        "isActive": true,
+        "username":"Usuario B",
+        "bankAccounts": [
+            {
+               "firstName": "BANK",
+                "lastName": "TEST",
+                "accountTypeId": 21,
+                "accountNumber": "2225663",
+                "identificationTypeId": 12,
+                "identificationNumber": "0604113010",
+                "bankName": "Pichincha",
+                "mobileCodeId": 1001,
+                "mobile": "31253534",
+                "email": "bank@gmail.com",
+                "isActive": true
+            }
+        ]
+    },
+    "operation": "create"
+}

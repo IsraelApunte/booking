@@ -1,0 +1,73 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "businessId": {
+        "type": "integer"
+      },
+      "sector": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "latitude": {
+        "type": "integer"
+      },
+      "longitude": {
+        "type": "integer"
+      },
+      "isActive": {
+        "type": "boolean"
+      },
+      "businessHours": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "locationId": {
+                "type": "integer"
+              },
+              "day": {
+                "type": "string"
+              },
+              "startTime": {
+                "type": "string"
+              },
+              "endTime": {
+                "type": "string"
+              },
+              "isActive": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "locationId",
+              "day",
+              "startTime",
+              "endTime",
+              "isActive"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "businessId",
+      "sector",
+      "address",
+      "latitude",
+      "longitude",
+      "businessHours",
+      "isActive"
+    ]
+  }

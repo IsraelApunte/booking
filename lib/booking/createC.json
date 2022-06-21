@@ -1,0 +1,48 @@
+{
+    "entityName": "booking",
+    "body": {
+        "email": null,
+        "object": {
+            "id": null,
+            "customerId": 36,
+            "statusId": 31,
+            "emissionDate": null,
+            "bookingNumber": null,
+            "total": 1.86,
+            "subtotal": 1.80,
+            "iva": 0.00,
+            "percentageIva": 0,
+            "paymentCode": null,
+            "paymentImage": null,
+            "paymentMethodId": 72,
+            "locationId": 15,
+            "customerName": "Consumidor Final",
+            "identificationNumber": 9999999999,
+            "email": "adriana_toapanta@hotmail.com",
+            "mobile": "0993374440",
+            "address": "NA",
+            "isActive": true,
+            "bankAccountId": 1,
+            "sourceApp": "MOBILE",
+            "payphoneCommission": 0.06,
+            "percentagePayphoneCommission": 6,
+            "bookingDetails": [
+                {
+                    "productId": 14,
+                    "reservationDate": "2022-02-19",
+                    "startTime": "8:00:00",
+                    "endTime": "9:00:00",
+                    "quantity": 1,
+                    "price": 0.89,
+                    "subtotal": 0.89,
+                    "iva": 0.10679999999999999,
+                    "total": 0.9968,
+                    "discountId": null,
+                    "percentageDiscount": 0,
+                    "isActive": true
+                }
+            ]
+        }
+    },
+    "operation": "create"
+}

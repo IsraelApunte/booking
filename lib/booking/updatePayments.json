@@ -1,0 +1,26 @@
+{
+    "entityName": "booking",
+    "body": [
+        {
+            "id": 11,
+            "isPaid": true,
+            "paymentDate": "2021-11-25T15:51:00.090Z"
+        },
+        {
+            "id": 15,
+            "isPaid": true,
+            "paymentDate": "2021-11-25T15:51:00.090Z"
+        },
+        {
+            "id": 17,
+            "isPaid": true,
+            "paymentDate": "2021-11-25T15:51:00.090Z"
+        },
+        {
+            "id": 18,
+            "isPaid": true,
+            "paymentDate": "2021-11-25T15:51:00.090Z"
+        }
+    ],
+    "operation": "updatePayments"
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": ["integer", "null"]
+    },
+    "mobileCodeId": {
+      "type": "integer"
+    },
+    "agentId": {
+      "type": ["integer", "null"]
+    },
+    "businessName": {
+      "type": "string"
+    },
+    "identificationTypeId": {
+      "type": ["integer", "null"]
+    },
+    "identificationNumber": {
+      "type": "string"
+    },
+    "tradename": {
+      "type": ["string", "null"]
+    },
+    "birthday": {
+      "type": "string"
+    },
+    "mobile": {
+      "type": "string"
+    },
+    "phone": {
+      "type": ["string", "null"]
+    },
+    "email": {
+      "type": "string"
+    },
+    "logo": {
+      "type": ["string", "null"]
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "bankAccount": {
+      "type": ["array", "null"],
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": ["integer", "null"]
+            },
+            "accountTypeId": {
+              "type": "integer"
+            },
+            "businessId": {
+              "type": ["integer", "null"]
+            },
+            "bank": {
+              "type": "string"
+            },
+            "accountNumber": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "mobile": {
+              "type": "string"
+            },
+            "businessName": {
+              "type": "string"
+            },
+            "isActive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "accountTypeId",
+            "businessId",
+            "bank",
+            "accountNumber",
+            "email",
+            "mobile",
+            "businessName",
+            "isActive"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "mobileCodeId",
+    "agentId",
+    "businessName",
+    "identificationTypeId",
+    "identificationNumber",
+    "tradename",
+    "birthday",
+    "mobile",
+    "phone",
+    "email",
+    "logo",
+    "bankAccount",
+    "isActive"
+  ]
+}

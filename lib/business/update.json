@@ -1,0 +1,40 @@
+{
+    "entityName": "business",
+    "body": {
+        "id": 69,
+        "mobileCodeId": "1001",
+        "agentId": null,
+        "firstName": "prueba datos storeId",
+        "lastName": "update",
+        "identificationTypeId": "12",
+        "identificationNumber": "0604113001",
+        "tradename": "franquicia datos",
+        "birthday": "2022-02-07",
+        "storeId": "98ef6e56-da8d-4c16-ba06-22f14de28bd1",
+        "cityId": "348",
+        "provinceId": "108",
+        "mobile": "0956863655",
+        "phone": "02401985",
+        "email": "cahix36036@afarek.com",
+        "personTypeId": null,
+        "logo": "https://alplto-booking-s3-public-dev.s3.amazonaws.com/business/1644339691081.png",
+        "isActive": true,
+        "bankAccounts": [
+            {
+                "accountTypeId": "22",
+                "bankNameId": 82,
+                "accountNumber": "0999999",
+                "id": "112",
+                "firstName": "prueba datos",
+                "lastName": "update",
+                "identificationTypeId": "12",
+                "identificationNumber": "0604113001",
+                "mobileCodeId": "1001",
+                "mobile": "0956863655",
+                "email": "cahix36036@afarek.com",
+                "isActive": true
+            }
+        ]
+    },
+    "operation": "update"
+}

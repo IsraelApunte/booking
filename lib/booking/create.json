@@ -1,0 +1,47 @@
+{
+    "entityName": "booking",
+    "body": {
+        "email": null,
+        "object": {
+            "id": null,
+            "customerId": 1,
+            "statusId": 31,
+            "emissionDate": null,
+            "bookingNumber": 1,
+            "total": 35.6,
+            "subtotal": 30,
+            "iva": 3.599999999996,
+            "percentageIva": 12,
+            "paymentCode": null,
+            "paymentImage": null,
+            "locationId": 2,
+            "customerName": "TEST CUSTOMER BOOKING",
+            "identificationNumber": "060411102",
+            "email": "prueba@gmail.com",
+            "mobile": "0993374440",
+            "address": "la gasca",
+            "isActive": true,
+            "bankAccountId": null,
+            "sourceApp": "CUSTOMER",
+            "payphoneCommission": 23.32,
+            "percentagePayphoneCommission": 6,
+            "bookingDetails": [
+                {
+                    "productId": 2,
+                    "reservationDate": "2022-05-25",
+                    "startTime": "08:00:00",
+                    "endTime": "10:00:00",
+                    "quantity": 2,
+                    "price": 200,
+                    "subtotal": 200,
+                    "iva": 20,
+                    "total": 141.60,
+                    "discountId": null,
+                    "percentageDiscount": 0,
+                    "isActive": true
+                }
+            ]
+        }
+    },
+    "operation": "create"
+}

@@ -1,0 +1,10 @@
+{
+    "entityName": "product",
+    "body": {
+        "id": 29,
+        "searchFilter": {
+            "bookingDate": "2022-03-23"
+        }
+    },
+    "operation": "getOneSchedules"
+}

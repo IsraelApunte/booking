@@ -1,0 +1,1022 @@
+service: alplto-booking
+
+frameworkVersion: "2"
+
+package:
+  patterns:
+    - src/env/${opt:stage, 'dev'}.env 
+    - src/templates/**
+
+plugins:
+  - serverless-offline
+  - serverless-esbuild
+  - serverless-prune-plugin
+layers:
+  htmlToPdf:
+    path: executables
+    name: htmlToPdf-${self:provider.stage}
+    description: ${self:service}-fonts-html-to-pdf  
+
+custom:
+  esbuild:
+    plugins: plugin.js
+    bundle: true
+    minify: false    
+  bucketName: ${self:service}-s3-${self:provider.stage}
+  bucketPublicName: ${self:service}-s3-public-${self:provider.stage}
+  commonInfra: knos-common-infra
+  bookingResource: alplto-booking-resource
+  vpcSecurityGroupId: !ImportValue ${self:custom.commonInfra}-vpc-sg-${self:provider.stage}
+  vpcSubnetAId: !ImportValue ${self:custom.commonInfra}-vpc-subneta-${self:provider.stage}
+  vpcSubnetBId: !ImportValue ${self:custom.commonInfra}-vpc-subnetb-${self:provider.stage}
+  arnUserPool: !ImportValue ${self:custom.bookingResource}-arnUserPool-${self:provider.stage}
+  variablesResolutionMode: 20210326
+  serverless-offline:
+    httpPort: 8080
+  moduleAgents: agents
+  moduleBookings: bookings
+  moduleBusinesses: businesses
+  moduleCatalogs: catalogs
+  moduleCustomers: customers
+  moduleLocations: locations
+  moduleProducts: products
+  moduleSports: sports
+  moduleBankAccounts: bank-accounts
+  moduleAlpeloteo: alpeloteo
+  moduleBanners: banners
+  moduleDashboards: dashboards
+  moduleMenus: menus
+  moduleUsers: users
+  moduleRoles: roles
+  moduleProfiles: profiles
+  moduleSchedules: schedules
+  modulePercentages: percentages
+  moduleReschedules: reschedules
+  moduleCommission: commissions
+  moduleEvents: events
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  runtime: nodejs14.x
+  versionFunctions: false
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, 'dev'} 
+  memorySize: 1024
+  timeout: 30
+  apiGateway:
+    shouldStartNameWithService: true
+  apiKeys:
+    - ${self:service}-${self:provider.stage}    
+  stackTags:
+    deployment_guid: ${self:provider.stage}
+    lm_troux_uid: ${self:service}-${self:provider.stage} 
+    lm_app: ${self:service}-${self:provider.stage}   
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "lambda:InvokeFunction"
+            - "cognito-idp:*"
+          Resource:
+            - "*"   
+        - Effect: "Allow"
+          Action:
+            - "ses:SendEmail"
+            - "ses:SendRawEmail"
+          Resource:
+            - "*"             
+        - Effect: "Allow"
+          Action:
+            - "s3:Put*"
+            - "s3:Get*"
+            - "s3:List*"
+            - "s3:Delete*"
+          Resource:
+            - "*"  
+resources:
+  Resources:
+    ApiGatewayAuthorizer:
+      DependsOn:
+        - ApiGatewayRestApi
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        AuthorizerResultTtlInSeconds: 10
+        IdentitySource: method.request.header.Authorization
+        Name: ${self:service}-cognito-authorizer-${self:provider.stage}
+        Type: COGNITO_USER_POOLS
+        RestApiId: { "Ref": "ApiGatewayRestApi" }
+        ProviderARNs:
+          - ${self:custom.arnUserPool}         
+functions:  
+  agent:
+    name: ${self:service}-agent-${self:provider.stage}
+    handler: src/controller/AgentController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleAgents}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleAgents}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleAgents}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleAgents}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  booking:
+    name: ${self:service}-booking-${self:provider.stage}
+    handler: src/controller/BookingController.initEvent
+    layers:
+      - Ref: HtmlToPdfLambdaLayer     
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+      LAMBDA_POSTGRES: ${self:service}-postgres-${self:provider.stage}
+      BUCKET_NAME: ${self:custom.bucketName}
+      BUCKET_PUBLIC_NAME: ${self:custom.bucketPublicName}      
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleBookings}  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer       
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBookings}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBookings}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false    
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer   
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBookings}/payments
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false    
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer              
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBookings}/${self:custom.moduleBusinesses}/{id}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+                startDate: false
+                endDate: false   
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer                    
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleBookings}  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer 
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleBookings}/payments
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleBookings}/${self:custom.moduleReschedules}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer         
+  business:
+    name: ${self:service}-business-${self:provider.stage}
+    handler: src/controller/BusinessController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+      LAMBDA_POSTGRES: ${self:service}-postgres-${self:provider.stage}
+      BUCKET_NAME: ${self:custom.bucketName}
+      BUCKET_PUBLIC_NAME: ${self:custom.bucketPublicName}      
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleBusinesses}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBusinesses}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBusinesses}/${self:custom.moduleProfiles}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBusinesses}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true              
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer     
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleBusinesses}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  business-public:
+    name: ${self:service}-business-public-${self:provider.stage}
+    handler: src/controller/BusinessPublicController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+      LAMBDA_POSTGRES: ${self:service}-postgres-${self:provider.stage}
+      BUCKET_NAME: ${self:custom.bucketName}
+      BUCKET_PUBLIC_NAME: ${self:custom.bucketPublicName}
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleBusinesses}/public
+          private: true
+  catalog:
+    name: ${self:service}-catalog-${self:provider.stage}
+    handler: src/controller/CatalogController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleCatalogs}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCatalogs}/parents/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCatalogs}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleCatalogs}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  catalog-public:
+    name: ${self:service}-catalog-public-${self:provider.stage}
+    handler: src/controller/CatalogPublicController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCatalogs}/parents/{id}/public
+          private: true
+  location:
+    name: ${self:service}-location-${self:provider.stage}
+    handler: src/controller/LocationController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleLocations}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleLocations}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleLocations}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleLocations}/${self:custom.moduleBusinesses}/{id}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleLocations}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  location-public:
+    name: ${self:service}-location-public-${self:provider.stage}
+    handler: src/controller/LocationPublicController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleLocations}/${self:custom.moduleSports}/{id}/public
+          private: true
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleLocations}/{id}/public
+          private: true
+  product:
+    name: ${self:service}-product-${self:provider.stage}
+    handler: src/controller/ProductController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+      LAMBDA_POSTGRES: ${self:service}-postgres-${self:provider.stage}
+      BUCKET_NAME: ${self:custom.bucketName}
+      BUCKET_PUBLIC_NAME: ${self:custom.bucketPublicName}             
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleProducts}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/${self:custom.moduleSports}/{id}  
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer               
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/${self:custom.moduleSports}/{id}/${self:custom.moduleLocations}/{locationId}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+              paths:
+                id: true
+                locationId: true  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/{id}/${self:custom.moduleSchedules}/${self:custom.moduleBookings}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleProducts} 
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer  
+  product-public:
+    name: ${self:service}-product-public-${self:provider.stage}
+    handler: src/controller/ProductPublicController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/{id}/public 
+          private: true         
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/${self:custom.moduleLocations}/{id}/public
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+          private: true
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/{id}/${self:custom.moduleSchedules}/${self:custom.moduleBookings}/public
+          private: true 
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleProducts}/${self:custom.moduleSports}/{id}/${self:custom.moduleLocations}/{locationId}/public
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+              paths:
+                id: true
+                locationId: true
+              private: true
+  customer:
+    name: ${self:service}-customer-${self:provider.stage}
+    handler: src/controller/CustomerController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleCustomers}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCustomers}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCustomers}/${self:custom.moduleProfiles}    
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCustomers}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleCustomers} 
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  bank-account:
+    name: ${self:service}-bank-account-${self:provider.stage}
+    handler: src/controller/BankAccountController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      # - http:
+      #     method: post
+      #     cors: true
+      #     path: ${self:custom.moduleBankAccounts}
+      # - http:
+      #     method: get
+      #     cors: true
+      #     path: ${self:custom.moduleBankAccounts}/{id}
+      # - http:
+      #     method: get
+      #     cors: true
+      #     path: ${self:custom.moduleBankAccounts}
+      #     request:
+      #       parameters:
+      #         querystrings:
+      #           page: true
+      #           limit: true
+      #           filter: false
+      #           sort: false
+      #           isAsc: false
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBankAccounts}/${self:custom.moduleAlpeloteo}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleBankAccounts} 
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  dashboard:
+    name: ${self:service}-dashboard-${self:provider.stage}
+    handler: src/controller/DashboardController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleDashboards}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  banner:
+    name: ${self:service}-banner-${self:provider.stage}
+    handler: src/controller/BannerController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage} 
+      LAMBDA_POSTGRES: ${self:service}-postgres-${self:provider.stage}
+      BUCKET_NAME: ${self:custom.bucketName}
+      BUCKET_PUBLIC_NAME: ${self:custom.bucketPublicName}          
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleBanners}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBanners}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBanners}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleBanners}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer     
+  banner-public:
+    name: ${self:service}-banner-public-${self:provider.stage}
+    handler: src/controller/BannerPublicController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleBanners}/public
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false 
+          private: true              
+  menu:
+    name: ${self:service}-menu-${self:provider.stage}
+    handler: src/controller/MenuController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleMenus}/${self:custom.moduleRoles}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  cognito:
+    name: ${self:service}-cognito-${self:provider.stage}
+    handler: src/controller/CognitoController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId}      
+  postgres:
+    name: ${self:service}-postgres-${self:provider.stage}
+    handler: src/controller/PostgresController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId}       
+  iva:
+    name: ${self:service}-iva-${self:provider.stage}
+    handler: src/controller/IvaController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.modulePercentages}/iva
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer        
+  iva-public:
+    name: ${self:service}-iva-public-${self:provider.stage}
+    handler: src/controller/IvaController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.modulePercentages}/iva/public
+          private: true    
+  payment-verify:
+    name: ${self:service}-payment-verify-${self:provider.stage}
+    handler: src/controller/PaymentVerifyController.initEvent
+    layers:
+      - Ref: HtmlToPdfLambdaLayer
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+      LAMBDA_POSTGRES: ${self:service}-postgres-${self:provider.stage}
+    events:
+      - schedule: cron(0/5 * * * ? *)
+      # - schedule: rate(1 hour)
+        enabled: true
+  payphone-commission:
+    name: ${self:service}-payphone-commission-${self:provider.stage}
+    handler: src/controller/CommissionController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCommission}/payphone
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer        
+  payphone-commission-public:
+    name: ${self:service}-payphone-commission-public-${self:provider.stage}
+    handler: src/controller/CommissionController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    events:
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleCommission}/payphone/public
+          private: true
+  event:
+    name: ${self:service}-event-${self:provider.stage}
+    handler: src/controller/EventController.initEvent
+    environment:
+      LAMBDA_ENV: ${self:provider.stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.vpcSecurityGroupId}
+      subnetIds:
+        - ${self:custom.vpcSubnetAId}
+        - ${self:custom.vpcSubnetBId} 
+    events:
+      - http:
+          method: post
+          cors: true
+          path: ${self:custom.moduleEvents}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: put
+          cors: true
+          path: ${self:custom.moduleEvents}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleEvents}/{id}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleEvents}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false  
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      - http:
+          method: get
+          cors: true
+          path: ${self:custom.moduleEvents}/${self:custom.moduleBusinesses}/{id}
+          request:
+            parameters:
+              querystrings:
+                page: true
+                limit: true
+                filter: false
+                sort: false
+                isAsc: false
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+      
+                  

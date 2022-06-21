@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "businessName": {
+      "type": "string"
+    },
+    "identificationTypeId": {
+      "type": "integer"
+    },
+    "identificationNumber": {
+      "type": "string"
+    },
+    "birthday": {
+      "type": "string"
+    },
+    "mobile": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "accountTypeId": {
+      "type": "integer"
+    },
+    "accountNumber": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "businessName",
+    "identificationTypeId",
+    "identificationNumber",
+    "birthday",
+    "mobile",
+    "phone",
+    "email",
+    "accountTypeId",
+    "accountNumber",
+    "isActive"
+  ]
+}

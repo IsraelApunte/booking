@@ -1,0 +1,38 @@
+{
+    "entityName": "business",
+    "body": {
+        "id": null,
+        "mobileCodeId": 1001,
+        "firstName": "BUSINESS",
+        "lastName": "TEST",
+        "identificationTypeId": 12,
+        "identificationNumber": "0604113001",
+        "tradename": "PRUEBA USUARIO",
+        "birthday": "1969-12-31",
+        "mobile": "0993374440",
+        "phone": "02401985",
+        "email": "xadoh80983test@chatich.com",
+        "cityId": "348",
+        "provinceId": "108",
+        "personTypeId": null,
+        "logo": "https://alplto-booking-s3-public-dev.s3.amazonaws.com/product/1644937481380.png",
+        "isActive": true,
+        "bankAccounts": [
+            {
+                "accountTypeId": 22,
+                "bankNameId": 82,
+                "accountNumber": "0999999",
+                "id": null,
+                "firstName": "prueba datos",
+                "lastName": "TEST",
+                "identificationTypeId": 12,
+                "identificationNumber": "0604113001",
+                "mobileCodeId": 1001,
+                "mobile": "0993374440",
+                "email": "xadoh80983@chatich.com",
+                "isActive": true
+            }
+        ]
+    },
+    "operation": "create"
+}

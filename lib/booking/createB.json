@@ -1,0 +1,46 @@
+{
+    "entityName": "booking",
+    "body": {
+        "email": "mary7.toapanta@gmail.com",
+        "object": {
+            "id": null,
+            "customerId": 1,
+            "statusId": 31,
+            "emissionDate": "2021-11-23T16:47:15.305Z",
+            "bookingNumber": null,
+            "total": 77,
+            "subtotal": 50,
+            "iva": 2.20,
+            "percentageIva": 12,
+            "paymentCode": null,
+            "paymentImage": null,
+            "locationId": 3,
+            "customerName": "customer test",
+            "identificationNumber": "0604113019",
+            "email": "test@.gmail.com",
+            "emailWasSent":false,
+            "mobile": "02645859",
+            "address": "La gasca",
+            "isActive": true,
+            "bankAccountId":1,
+            "sourceApp":"BUSINESS",
+            "bookingDetails": [
+                {
+                    "productId": 3,
+                    "reservationDate": "2021-11-24",
+                    "startTime": "08:00:00",
+                    "endTime": "10:00:00",
+                    "quantity": 2,
+                    "price": 60,
+                    "subtotal": 120,
+                    "iva": 14.40,
+                    "total": 134.40,
+                    "discountId": null,
+                    "percentageDiscount": 0,
+                    "isActive": true
+                }
+            ]
+        }
+    },
+    "operation": "create"
+}

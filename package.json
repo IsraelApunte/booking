@@ -1,0 +1,47 @@
+{
+  "name": "serverless",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "lint": "eslint . --ext .ts --quiet --fix"
+  },
+  "author": "Khronos",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.76",
+    "@types/html-pdf": "^2.2.1",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.7.4",
+    "@types/nodemailer": "^6.4.4",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "aws-cognito-idp-userpool-domain": "^0.1.5",
+    "aws-sdk": "^2.963.0",
+    "esbuild-node-externals": "^1.3.0",
+    "eslint": "^7.31.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.24.0",
+    "jest": "^27.0.6",
+    "serverless": "^2.52.1",
+    "serverless-esbuild": "^1.21.1",
+    "serverless-offline": "^7.0.0",
+    "serverless-prune-plugin": "^1.6.1",
+    "ts-jest": "^27.0.4",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "html-pdf": "2.2.0",
+    "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
+    "node-fetch": "^3.1.0",
+    "nodemailer": "^6.6.3",
+    "numeral": "^2.0.6",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.5"
+  }
+}

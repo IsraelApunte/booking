@@ -1,0 +1,13 @@
+{
+    "entityName": "banner",
+    "body": {
+        "id": null,
+        "name": "BANNER TEST",
+        "imageDesktop": "https://intl-latam-khronos-resources.s3.amazonaws.com/banner/1635363694610.png",
+        "imageTablet": "https://intl-latam-khronos-resources.s3.amazonaws.com/banner/1635363694610.png",
+        "imageMobile": "https://intl-latam-khronos-resources.s3.amazonaws.com/banner/1635363694610.png",
+        "url": "string",
+        "isActive": true
+    },
+    "operation": "create"
+}

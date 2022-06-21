@@ -1,0 +1,16 @@
+{
+    "entityName": "booking",
+    "body": {
+        "email": "mary7.toapanta@gmail.com",
+        "searchFilter": {
+            "page": 1,
+            "limit": 10,
+            "filter": null,
+            "sort": null,
+            "isAsc": null,
+            "starDate":null,
+            "endDate":null
+        }
+    },
+    "operation": "findAllByBusinessPaginates"
+}

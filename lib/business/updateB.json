@@ -1,0 +1,54 @@
+{
+    "entityName": "business",
+    "body": {
+        "email": "prueba2141@hotmail.com",
+        "object": {
+            "creationDate": "2022-01-27T20:08:01.048Z",
+            "id": 64,
+            "mobileCodeId": 1001,
+            "agentId": null,
+            "firstName": "FRANQUICIA",
+            "lastName": "TEST",
+            "identificationTypeId": 12,
+            "identificationNumber": "0921999488",
+            "tradename": "FUNDEPORTE",
+            "birthday": "2021-11-15",
+            "mobile": "999888745",
+            "phone": "99999995",
+            "email": "prueba2141@hotmail.com",
+            "personTypeId": null,
+            "provinceId": 108,
+            "cityId": 348,
+            "storeId": null,
+            "logo": "https://alplto-booking-s3-public-dev.s3.amazonaws.com/business/1643316904217.png",
+            "isActive": true,
+            "bankAccounts": [
+                {
+                    "creationDate": "2022-01-27T20:08:01.030Z",
+                    "id": 106,
+                    "accountTypeId": 22,
+                    "bankNameId": 84,
+                    "accountNumber": "12345654",
+                    "firstName": "Test",
+                    "lastName": "Bank",
+                    "identificationTypeId": 12,
+                    "identificationNumber": "0921999488",
+                    "mobileCodeId": 1001,
+                    "mobile": "999888745",
+                    "email": "yidev65068@healteas.com",
+                    "isActive": true,
+                    "businessId": 64,
+                    "personTypeId": null,
+                    "agentId": null,
+                    "creationUser": null,
+                    "updateUser": null,
+                    "updateDate": null
+                }
+            ],
+            "creationUser": null,
+            "updateUser": null,
+            "updateDate": null
+        }
+    },
+    "operation": "updateByBusiness"
+}

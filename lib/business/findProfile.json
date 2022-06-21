@@ -1,0 +1,7 @@
+{
+    "entityName": "business",
+    "body": {
+        "email": "atoapanta@khronoscloud.com"
+    },
+    "operation": "getOneByBusinessProfile"
+}

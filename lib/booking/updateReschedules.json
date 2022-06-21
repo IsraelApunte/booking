@@ -1,0 +1,22 @@
+{
+    "entityName": "booking",
+    "body": {
+        "id": 295,
+        "statusId": 31,
+        "locationId": 26,
+        "bookingDetails": [
+            {
+                "productId": 20,
+                "startTime": "08:00",
+                "endTime": "09:00",
+                "reservationDate": "2022-02-24",
+                "subtotal": 10.5,
+                "quantity": 1,
+                "price": 10.5,
+                "iva": 1.26,
+                "total": 11.76
+            }
+        ]
+    },
+    "operation": "updateReschedules"
+}

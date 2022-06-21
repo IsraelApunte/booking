@@ -1,0 +1,17 @@
+{
+    "entityName": "product",
+    "body": {
+        "email": "bguamanzara@khronoscloud.com",
+        "searchFilter": {
+            "page": 1,
+            "limit": 10,
+            "filter": "FUTBOL",
+            "sort": null,
+            "isAsc": null,
+            "startDate": null,
+            "endDate": null,
+            "businessId": null
+        }
+    },
+    "operation": "findAllByBusinessPaginates"
+}

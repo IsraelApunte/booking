@@ -1,0 +1,9 @@
+{
+    "entityName": "booking",
+    "body": [
+        227,
+        224,
+        219
+    ],
+    "operation": "updatePaymentsVerify"
+}

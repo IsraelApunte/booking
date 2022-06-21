@@ -1,0 +1,7 @@
+{
+    "entityName": "booking",
+    "body": {
+        "id": 1
+    },
+    "operation": "getOne"
+}

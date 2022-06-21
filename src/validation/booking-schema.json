@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": ["integer", "null"]
+    },
+    "customerId": {
+      "type": "integer"
+    },
+    "statusId": {
+      "type": ["integer", "null"]
+    },
+    "date": {
+      "type": "string"
+    },
+    "expirationDate": {
+      "type": "string"
+    },
+    "bookingNumber": {
+      "type": "string"
+    },
+    "totalPrice": {
+      "type": "number"
+    },
+    "subtotalPrice": {
+      "type": "number"
+    },
+    "totalIva": {
+      "type": "number"
+    },
+    "totalDiscount": {
+      "type": "number"
+    },
+    "paymentCode": {
+      "type": "string"
+    },
+    "paymentImage": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "bookingDetail": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": ["integer", "null"]
+            },
+            "productId": {
+              "type": "integer"
+            },
+            "bookingId": {
+              "type": "integer"
+            },
+            "startDate": {
+              "type": "string"
+            },
+            "endDate": {
+              "type": "string"
+            },
+            "totalPrice": {
+              "type": "number"
+            },
+            "subtotalPrice": {
+              "type": "number"
+            },
+            "iva": {
+              "type": "number"
+            },
+            "discountId": {
+              "type": ["integer", "null"]
+            },
+            "isActive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id",
+            "productId",
+            "bookingId",
+            "startDate",
+            "endDate",
+            "totalPrice",
+            "subtotalPrice",
+            "iva",
+            "discountId",
+            "isActive"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "customerId",
+    "statusId",
+    "date",
+    "expirationDate",
+    "bookingNumber",
+    "totalPrice",
+    "subtotalPrice",
+    "totalIva",
+    "totalDiscount",
+    "paymentCode",
+    "paymentImage",
+    "bookingDetail",
+    "isActive"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+    "entityName": "booking",
+    "body": {
+        "searchFilter": {
+            "page": 1,
+            "limit": 10,
+            "filter": null,
+            "sort": null,
+            "isAsc": null,
+            "startDate": "2021-11-23T05:00:00.000Z",
+            "endDate": "2021-11-26T05:00:00.000Z",
+            "businessId": null
+        }
+    },
+    "operation": "findAllPaymentsByPaginates"
+}

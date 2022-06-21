@@ -1,0 +1,24 @@
+{
+    "entityName": "product",
+    "body": {
+        "id": null,
+        "locationId": 2,
+        "sku": "PRODUCT0001",
+        "numberPlayers": 12,
+        "price": 10,
+        "sportId": 41,
+        "isCovered": true,
+        "courtTypeId": 1001,
+        "currencyId": 12,
+        "isActive": true,
+        "isSynthetic": true,
+        "galleries": [
+            {
+                "productId": null,
+                "image": "https://alplto-booking-s3-public-dev.s3.amazonaws.com/product/1644937481380.png",
+                "isActive": true
+            }
+        ]
+    },
+    "operation": "create"
+}

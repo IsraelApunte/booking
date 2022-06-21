@@ -1,0 +1,16 @@
+{
+    "entityName": "booking",
+    "body": {
+        "searchFilter": {
+            "page": 1,
+            "limit": 10,
+            "filter": null,
+            "sort": null,
+            "isAsc": null,
+            "startDate": null,
+            "endDate": null,
+            "businessId": null
+        }
+    },
+    "operation": "findAllByPaginates"
+}

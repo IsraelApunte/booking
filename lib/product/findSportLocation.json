@@ -1,0 +1,13 @@
+{
+    "entityName": "product",
+    "body": {
+        "productId":41,
+        "locationId":3,
+        "searchFilter": { "page": 1, 
+            "limit": 10,
+            "filter" : null, 
+            "sort": null, 
+            "isAsc": null }
+    },
+    "operation": "findSportByIdLocationPaginates"
+}

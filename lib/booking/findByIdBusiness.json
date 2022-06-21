@@ -1,0 +1,16 @@
+{
+    "entityName": "booking",
+    "body": {
+        "id":9,
+        "searchFilter": {
+            "page": 1,
+            "limit": 10,
+            "filter": null,
+            "sort": null,
+            "isAsc": null,
+            "startDate":"2021-11-17",
+            "endDate":"2021-11-19"
+        }
+    },
+    "operation": "findByIdBusiness"
+}

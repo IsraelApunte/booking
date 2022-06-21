@@ -1,0 +1,12 @@
+{
+    "entityName": "product",
+    "body": {
+        "searchFilter": { 
+            "page": 1, 
+            "limit": 10,
+            "filter" : "TEST001", 
+            "sort": null, 
+            "isAsc": null }
+    },
+    "operation": "findAllByPaginates"
+}

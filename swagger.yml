@@ -1,0 +1,1363 @@
+swagger: '2.0'
+info:
+  title: alpeloteo
+  version: '1.0'
+  description: Proyect Alpeloteo
+  contact:
+    name: khronos
+    url: 'https://khronoscloud.com'
+    email: khronos.uio@gmail.com
+  termsOfService: 'https://khronoscloud.com/services'
+tags:
+  - name: business
+    description: Everything about your business
+  - name: agent
+    description: Everything about your agent
+  - name: catalog
+    description: Everything about your catalog
+  - name: location
+    description: Everything about your location
+  - name: product
+    description: Everything about your product
+  - name: customer
+    description: Everything about your customer
+  - name: booking
+    description: Everything about your booking
+host: 'localhost:3000'
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /business:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Business'
+          examples:
+            example-1:
+              - id: 0
+                mobileCodeId: 0
+                agentId: 0
+                businessName: string
+                identificationTypeId: 0
+                identificationNumber: stringstrings
+                tradename: string
+                birthday: string
+                mobile: stringstrings
+                phone: stringstrings
+                email: string
+                logo: string
+      operationId: get-business
+      parameters:
+        - type: string
+          in: query
+          name: filter
+          description: 'Filter generic by search name, identification number'
+      description: Retrieve the information of the business.
+      tags:
+        - business
+    post:
+      summary: Create business
+      operationId: post-business
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/BusinessBankAcount'
+          x-examples:
+            example-1:
+              id: 0
+              mobileCodeId: 0
+              agentId: 0
+              businessName: string
+              identificationTypeId: 0
+              identificationNumber: string
+              tradename: string
+              birthday: string
+              mobile: string
+              phone: string
+              email: string
+              logo: string
+              bankAccount:
+                - id: 0
+                  accountTypeId: 0
+                  businessId: 0
+                  bank: string
+                  accountNumber: string
+                  email: string
+                  mobile: string
+                  businessName: string
+      description: Create Business
+      tags:
+        - business
+    put:
+      summary: ''
+      operationId: put-business
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/BusinessBankAcount'
+          description: ''
+          x-examples:
+            example-1:
+              id: 0
+              mobileCodeId: 0
+              agentId: 0
+              businessName: string
+              identificationTypeId: 0
+              identificationNumber: string
+              tradename: string
+              birthday: string
+              mobile: string
+              phone: string
+              email: string
+              logo: string
+              bankAccount:
+                - id: 0
+                  accountTypeId: 0
+                  businessId: 0
+                  bank: string
+                  accountNumber: string
+                  email: string
+                  mobile: string
+                  businessName: string
+      description: Update the information of an existing business.
+      tags:
+        - business
+    delete:
+      summary: ''
+      operationId: delete-business
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/BusinessBankAcount'
+      description: Delete the information of an existing business.
+      tags:
+        - business
+  '/business/{Id}':
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Business'
+          examples:
+            example-1:
+              id: 0
+              mobileCodeId: 0
+              agentId: 0
+              businessName: string
+              identificationTypeId: 0
+              identificationNumber: stringstrings
+              tradename: string
+              birthday: string
+              mobile: stringstrings
+              phone: stringstrings
+              email: string
+              logo: string
+      operationId: get-businessId
+      description: Retrieve the information of the business with the matching business ID.
+      parameters: []
+      tags:
+        - business
+    parameters:
+      - type: string
+        name: Id
+        in: path
+        required: true
+  /agent:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Agent'
+      operationId: get-agent
+      parameters:
+        - type: string
+          in: query
+          name: filter
+          description: 'Filter generic by search business name, identification number'
+      description: Retrieve the information of the agent.
+      tags:
+        - agent
+    post:
+      summary: ''
+      operationId: post-agent
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Agent'
+          x-examples:
+            example-1:
+              id: 0
+              businessName: string
+              identificationTypeId: 0
+              identificationNumber: string
+              birthday: string
+              mobile: stringstrings
+              phone: stringstrings
+              email: string
+              accountTypeId: 0
+              accountNumber: stringstringstringst
+              bank: string
+      description: Create Agent
+      tags:
+        - agent
+    put:
+      summary: ''
+      operationId: put-agent
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+          description: Put by Id
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Agent'
+      description: Update the information of an existing agent.
+      tags:
+        - agent
+    delete:
+      summary: ''
+      operationId: delete-agent
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+          description: Delete by id
+      description: Delete the information of an existing agent.
+      tags:
+        - agent
+  /catalog:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Catalog1'
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Location'
+      operationId: get-catalog
+      parameters:
+        - type: string
+          in: query
+          name: filter
+          description: Filter generic by search  name
+      description: Retrieve the information of the catalog.
+      tags:
+        - catalog
+    parameters: []
+    post:
+      summary: ''
+      operationId: post-catalogue
+      responses:
+        '200':
+          description: OK
+          examples:
+            example-1: {}
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Catalog1'
+          description: ''
+          x-examples:
+            example-1:
+              id: 0
+              name: string
+              code: string
+              isActive: true
+      description: Create Catalog
+      tags:
+        - catalog
+    put:
+      summary: ''
+      operationId: put-catalogue
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Update the information of an existing catalog.
+      tags:
+        - catalog
+    delete:
+      summary: ''
+      operationId: delete-catalogue
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Delete the information of an existing catalog.
+      tags:
+        - catalog
+  /bankAccount:
+    delete:
+      summary: ''
+      operationId: delete-bankAccount
+      responses:
+        '200':
+          description: OK
+      description: Delete the information of an existing bank Account.
+      tags:
+        - business
+    post:
+      summary: ''
+      operationId: post-bankAccount
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/BankAccount'
+          x-examples:
+            example-1:
+              id: 0
+              accountTypeId: 0
+              businessId: 0
+              bank: string
+              accountNumber: string
+              email: string
+              mobile: string
+              businessName: string
+      description: Create Bank Account
+      tags:
+        - business
+  /location:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Location'
+      operationId: get-location
+      parameters:
+        - type: string
+          in: query
+          name: filter
+          description: Filter generic
+      description: Retrieve the information of the location.
+      tags:
+        - business
+    post:
+      summary: ''
+      operationId: post-location
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Location'
+          x-examples:
+            example-1:
+              id: 0
+              businessId: 0
+              sector: string
+              address: string
+              latitude: string
+              longitude: string
+              businessHoours:
+                id: 0
+                locationId: 0
+                day: string
+                startTime: string
+                endTime: string
+      description: Create Location
+      tags:
+        - business
+    put:
+      summary: ''
+      operationId: put-location
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Update the information of an existing location.
+      tags:
+        - business
+    delete:
+      summary: ''
+      operationId: delete-location
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Delete the information of an existing location.
+      tags:
+        - business
+  /product:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Product'
+          examples:
+            example-1:
+              id: 0
+              locationId: 0
+              sku: string
+              numberPlayers: 0
+              price: 0
+              sportId: 0
+              isCovered: true
+              features: string
+              currencyId: 0
+              image: string
+              catalog:
+                - id: 0
+                  name: string
+                  code: string
+                  isActive: true
+      operationId: get-product
+      parameters:
+        - type: string
+          in: query
+          name: filter
+          description: Filter generic by search sku
+      description: Retrieve the information of the product.
+      tags:
+        - business
+    post:
+      summary: ''
+      operationId: post-product
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Product'
+          x-examples:
+            example-1:
+              id: 0
+              locationId: 0
+              sku: string
+              numberPlayers: 0
+              price: 0
+              sportId: 0
+              isCovered: true
+              features: string
+              currencyId: 0
+              gallery:
+                id: 0
+                productId: 0
+                image: string
+              catalog:
+                id: 0
+                name: string
+                code: string
+                isActive: true
+      description: Create Product
+      tags:
+        - business
+    put:
+      summary: ''
+      operationId: put-product
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Update the information of an existing product.
+      tags:
+        - business
+    delete:
+      summary: ''
+      operationId: delete-product
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties: {}
+          description: ''
+        - type: string
+          in: query
+          name: id
+      description: Delete the information of an existing product.
+      tags:
+        - business
+  /customer:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Customers'
+      operationId: get-customer
+      parameters:
+        - type: string
+          in: query
+          name: fliter
+          description: 'Filter generic by search id, identification number'
+      description: Retrieve the information of the customer.
+      tags:
+        - booking
+    post:
+      summary: ''
+      operationId: post-customer
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Customers'
+          x-examples:
+            example-1:
+              id: 0
+              businessName: string
+              identificationTypeId: 0
+              identificationNumber: string
+              birthday: string
+              mobile: string
+              phone: string
+              email: string
+      description: Create Customer
+      tags:
+        - booking
+    put:
+      summary: ''
+      operationId: put-customer
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Update the information of an existing customer.
+      tags:
+        - booking
+    delete:
+      summary: ''
+      operationId: delete-customer
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Delete the information of an existing customer.
+      tags:
+        - booking
+  /booking:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Booking'
+      operationId: get-booking
+      parameters:
+        - type: string
+          in: query
+          name: filter
+          description: 'Filter generic by search id, booking name'
+      description: Retrieve the information of the booking.
+      tags:
+        - booking
+    post:
+      summary: ''
+      operationId: post-booking
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Booking'
+          x-examples:
+            example-1:
+              id: 0
+              customerId: 0
+              statusId: string
+              date: string
+              expirationDate: string
+              bookingNumber: string
+              totalPrice: 0
+              subtotalPrice: 0
+              totalIva: 0
+              totalDiscount: 0
+              paymentId: string
+              paymentImage: string
+              bookingDetail:
+                - id: 0
+                  productId: 0
+                  bookingId: 0
+                  startDate: string
+                  endDate: string
+                  totalPrice: 0
+                  subtotalPrice: 0
+                  iva: 0
+                  discountId: 0
+      description: Create Booking
+      tags:
+        - booking
+    put:
+      summary: ''
+      operationId: put-booking
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Update the information of an existing booking.
+      tags:
+        - booking
+    delete:
+      summary: ''
+      operationId: delete-booking
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Booking'
+          description: ''
+      description: Delete the information of an existing booking.
+      tags:
+        - booking
+  /discount:
+    get:
+      summary: Your GET endpoint
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Discount'
+      operationId: get-discount
+      parameters:
+        - type: string
+          in: query
+          name: filter
+          description: 'Filter generic by search id, name'
+      description: Retrieve the information of the discount.
+      tags:
+        - booking
+    post:
+      summary: ''
+      operationId: post-discount
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Discount'
+          x-examples:
+            example-1:
+              id: 0
+              startDate: string
+              endDate: string
+              name: string
+              code: string
+              percentage: 0
+      description: Create Discount
+      tags:
+        - booking
+    put:
+      summary: ''
+      operationId: put-discount
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+      description: Update the information of an existing discount.
+      tags:
+        - booking
+    delete:
+      summary: ''
+      operationId: delete-discount
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - type: string
+          in: query
+          name: id
+          description: Delete by Id
+      description: Delete the information of an existing discount.
+      tags:
+        - booking
+definitions:
+  Business:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        id: 123
+        mobileCodeId: 123
+        agentId: 123
+        businessName: Fundeportes
+        identificationTypeId: 1234
+        identificationNumber: '1234567891234'
+        tradename: Fundeportes
+        birthday: '2021-08-12T00:00:00.000Z'
+        mobile: '+593998358654'
+        phone: '023202835'
+        email: bguamanzara@khronscloud.com
+        logo: 'https://web.whatsapp.com/'
+    properties:
+      id:
+        type: number
+      mobileCodeId:
+        type: number
+      agentId:
+        type: number
+      businessName:
+        type: string
+        minLength: 1
+      identificationTypeId:
+        type: number
+      identificationNumber:
+        type: string
+        minLength: 13
+        maxLength: 13
+      tradename:
+        type: string
+        minLength: 1
+      birthday:
+        type: string
+        minLength: 1
+      mobile:
+        type: string
+        minLength: 13
+        maxLength: 13
+      phone:
+        type: string
+        minLength: 13
+        maxLength: 13
+      email:
+        type: string
+        minLength: 1
+      logo:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - mobileCodeId
+      - agentId
+      - businessName
+      - identificationTypeId
+      - identificationNumber
+      - tradename
+      - birthday
+      - mobile
+      - phone
+      - email
+      - logo
+  BankAccount:
+    description: ''
+    type: object
+    properties:
+      id:
+        type: number
+      accountTypeId:
+        type: number
+      businessId:
+        type: number
+      bank:
+        type: string
+        minLength: 1
+      accountNumber:
+        type: string
+        minLength: 1
+      email:
+        type: string
+        minLength: 1
+      mobile:
+        type: string
+        minLength: 1
+      businessName:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - accountTypeId
+      - businessId
+      - bank
+      - accountNumber
+      - email
+      - mobile
+      - businessName
+    x-examples:
+      example-1:
+        id: 132
+        accountTypeId: 123
+        businessId: 123
+        bank: Banco Pichincha
+        accountNumber: '1234564553'
+        email: bguamanzara@khronscloud.com
+        mobile: '+593998358654'
+        businessName: Fundeportes
+  Catalog:
+    description: ''
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+        minLength: 1
+      code:
+        type: string
+        minLength: 1
+      isActive:
+        type: boolean
+    required:
+      - id
+      - name
+      - code
+      - isActive
+    x-examples:
+      example-1:
+        id: 123
+        name: catologo1
+        code: '123456'
+        isActive: true
+  Agent:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        id: 123
+        businessName: Fundeportes
+        identificationTypeId: 1234
+        identificationNumber: '1234567891234'
+        birthday: '2021-08-12T00:00:00.000Z'
+        mobile: '+593998358654'
+        phone: '023202835'
+        email: bguamanzara@khronscloud.com
+        accountTypeId: 1234
+        accountNumber: '12345678912345678912'
+        bank: Banco Pichincha
+    properties:
+      id:
+        type: number
+      businessName:
+        type: string
+        minLength: 1
+      identificationTypeId:
+        type: number
+      identificationNumber:
+        type: string
+        minLength: 1
+      birthday:
+        type: string
+        minLength: 1
+      mobile:
+        type: string
+        minLength: 13
+        maxLength: 13
+      phone:
+        type: string
+        minLength: 13
+        maxLength: 13
+      email:
+        type: string
+        minLength: 1
+      accountTypeId:
+        type: number
+      accountNumber:
+        type: string
+        minLength: 20
+        maxLength: 20
+      bank:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - businessName
+      - identificationTypeId
+      - identificationNumber
+      - birthday
+      - mobile
+      - phone
+      - email
+      - accountTypeId
+      - accountNumber
+      - bank
+  Location:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        id: 0
+        businessId: 0
+        sector: string
+        address: string
+        latitude: 0
+        longitude: 0
+        businessHours:
+          - id: 0
+            locationId: 0
+            day: string
+            startTime: string
+            endTime: string
+    properties:
+      id:
+        type: number
+      businessId:
+        type: number
+      sector:
+        type: string
+        minLength: 1
+      address:
+        type: string
+        minLength: 1
+      latitude:
+        type: number
+      longitude:
+        type: number
+      businessHours:
+        type: array
+        items:
+          $ref: '#/definitions/BusinessHours'
+    required:
+      - id
+      - businessId
+      - sector
+      - address
+      - latitude
+      - longitude
+  Discount:
+    description: ''
+    type: object
+    properties:
+      id:
+        type: number
+      startDate:
+        type: string
+        minLength: 1
+      endDate:
+        type: string
+        minLength: 1
+      name:
+        type: string
+        minLength: 1
+      code:
+        type: string
+        minLength: 1
+      percentage:
+        type: number
+    required:
+      - id
+      - startDate
+      - endDate
+      - name
+      - code
+      - percentage
+    x-examples:
+      example-1:
+        id: 565
+        startDate: '2021-08-12T08:00:00.000Z'
+        endDate: '2021-08-12T17:00:00.000Z'
+        name: BlackFriday
+        code: '156455'
+        percentage: 50
+  Booking:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        id: 123
+        customerId: 1234
+        statusId: Pagado
+        date: '2021-08-12T00:00:00.000Z'
+        expirationDate: '2021-18-12T00:00:00.000Z'
+        bookingNumber: '125453'
+        totalPrice: 123.36
+        subtotalPrice: 120.2
+        totalIva: 12.2
+        totalDiscount: 12.36
+        paymentId: '123'
+        paymentImage: 'https://web.whatsapp.com/'
+    properties:
+      id:
+        type: number
+      customerId:
+        type: number
+      statusId:
+        type: string
+        minLength: 1
+      date:
+        type: string
+        minLength: 1
+      expirationDate:
+        type: string
+        minLength: 1
+      bookingNumber:
+        type: string
+        minLength: 1
+      totalPrice:
+        type: number
+      subtotalPrice:
+        type: number
+      totalIva:
+        type: number
+      totalDiscount:
+        type: number
+      paymentId:
+        type: string
+        minLength: 1
+      paymentImage:
+        type: string
+        minLength: 1
+      bookingDetail:
+        type: array
+        items:
+          $ref: '#/definitions/BookingDetail'
+    required:
+      - id
+      - customerId
+      - statusId
+      - date
+      - expirationDate
+      - bookingNumber
+      - totalPrice
+      - subtotalPrice
+      - totalIva
+      - totalDiscount
+      - paymentId
+      - paymentImage
+  Customers:
+    description: ''
+    type: object
+    properties:
+      id:
+        type: number
+      businessName:
+        type: string
+        minLength: 1
+      identificationTypeId:
+        type: number
+      identificationNumber:
+        type: string
+        minLength: 1
+      birthday:
+        type: string
+        minLength: 1
+      mobile:
+        type: string
+        minLength: 1
+      phone:
+        type: string
+        minLength: 1
+      email:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - businessName
+      - identificationTypeId
+      - identificationNumber
+      - birthday
+      - mobile
+      - phone
+      - email
+    x-examples:
+      example-1:
+        id: 123
+        businessName: Fundeportes
+        identificationTypeId: 1234
+        identificationNumber: '1234567891234'
+        birthday: '2021-08-12T00:00:00.000Z'
+        mobile: '+593998358654'
+        phone: '023202835'
+        email: atoapanta@khronscloud.com
+    title: ''
+  Product:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        id: 0
+        locationId: 0
+        sku: string
+        numberPlayers: 0
+        price: 0
+        sportId: 0
+        isCovered: true
+        features: string
+        currencyId: 0
+        images:
+          - id: 0
+            productId: 0
+            image: string
+    properties:
+      id:
+        type: number
+      locationId:
+        type: number
+      sku:
+        type: string
+        minLength: 1
+      numberPlayers:
+        type: number
+      price:
+        type: number
+      sportId:
+        type: number
+      isCovered:
+        type: boolean
+      features:
+        type: string
+        minLength: 1
+      currencyId:
+        type: number
+      images:
+        type: array
+        items:
+          $ref: '#/definitions/Gallery'
+    required:
+      - id
+      - locationId
+      - sku
+      - numberPlayers
+      - price
+      - sportId
+      - isCovered
+      - features
+      - currencyId
+      - images
+  BookingDetail:
+    description: ''
+    type: object
+    properties:
+      id:
+        type: number
+      productId:
+        type: number
+      bookingId:
+        type: number
+      startDate:
+        type: string
+        minLength: 1
+      endDate:
+        type: string
+        minLength: 1
+      totalPrice:
+        type: number
+      subtotalPrice:
+        type: number
+      iva:
+        type: number
+      discountId:
+        type: number
+    required:
+      - id
+      - productId
+      - bookingId
+      - startDate
+      - endDate
+      - totalPrice
+      - subtotalPrice
+      - iva
+      - discountId
+    x-examples:
+      example-1:
+        id: 123
+        productId: 23
+        bookingId: 123
+        startDate: '2021-08-12T08:00:00.000Z'
+        endDate: '2021-08-12T17:00:00.000Z'
+        totalPrice: 123.2
+        subtotalPrice: 120.56
+        iva: 52.3
+        discountId: 20.2
+  BusinessHours:
+    description: ''
+    type: object
+    properties:
+      id:
+        type: number
+      locationId:
+        type: number
+      day:
+        type: string
+        minLength: 1
+      startTime:
+        type: string
+        minLength: 1
+      endTime:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - locationId
+      - day
+      - startTime
+      - endTime
+    x-examples:
+      example-1:
+        id: 123
+        locationId: 123
+        day: Domingo
+        startTime: '07:43:00'
+        endTime: '17:43:00'
+  BusinessBankAcount:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        id: 123
+        mobileCodeId: 123
+        agentId: 123
+        businessName: Fundeportes
+        identificationTypeId: 1234
+        identificationNumber: '1234567891234'
+        tradename: Fundeportes
+        birthday: '2021-08-12T00:00:00.000Z'
+        mobile: '+593998358654'
+        phone: '023202835'
+        email: bguamanzara@khronscloud.com
+        logo: 'https://web.whatsapp.com/'
+    properties:
+      id:
+        type: number
+      mobileCodeId:
+        type: number
+      agentId:
+        type: number
+      businessName:
+        type: string
+        minLength: 1
+      identificationTypeId:
+        type: number
+      identificationNumber:
+        type: string
+        minLength: 1
+      tradename:
+        type: string
+        minLength: 1
+      birthday:
+        type: string
+        minLength: 1
+      mobile:
+        type: string
+        minLength: 1
+      phone:
+        type: string
+        minLength: 1
+      email:
+        type: string
+        minLength: 1
+      logo:
+        type: string
+        minLength: 1
+      bankAccount:
+        type: array
+        items:
+          $ref: '#/definitions/BankAccount'
+    required:
+      - id
+      - mobileCodeId
+      - agentId
+      - businessName
+      - identificationTypeId
+      - identificationNumber
+      - tradename
+      - birthday
+      - mobile
+      - phone
+      - email
+      - logo
+  Gallery:
+    description: ''
+    type: object
+    properties:
+      id:
+        type: number
+      productId:
+        type: number
+      image:
+        type: string
+        minLength: 1
+    required:
+      - id
+      - productId
+      - image
+    x-examples:
+      example-1:
+        id: 0
+        productId: 0
+        image: string
+securityDefinitions:
+  API Key - 1:
+    name: API Key
+    type: apiKey
+    in: query
